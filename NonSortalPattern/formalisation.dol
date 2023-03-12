@@ -1,0 +1,67 @@
+%prefix( 
+	: <http://example.com#>
+	gufo: <https://purl.org/nemo/gufo#>
+	rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+)%
+
+
+logic OWL
+
+ontology GUFO = 
+	<https://purl.org/nemo/gufo#>
+end
+
+ontology RDFS = 
+	<http://www.w3.org/2000/01/rdf-schema#>
+end
+
+ontology Base =
+  GUFO and RDFS
+end
+
+
+pattern RefinedRelation
+    [Class: D; ObjectProperty: f; Class: R; ? Class: Role] =
+
+    ObjectProperty: f Domain: D Range: R
+    
+    Class: Role
+        SubClassOf: rolePerformedBy[D] max 1 D
+    
+    ObjectProperty: hasRole[Role] Range: Role
+    ObjectProperty: rolePerformedBy[D] InverseOf: hasRole[Role]
+    
+end
+
+
+pattern H1_Matching 
+	[Class: EndurantType; 
+	 Class: NonSortalType; 
+	 ? ObjectProperty: relation; 
+	 ? Class: EndurantOrDatatype]
+	given Base =
+		RefinedRelation[NonSortalType; relation; EndurantOrDatatype; ]
+	then 
+		Class: NonSortalType SubClassOf: gufo:NonSortal
+		Class: EndurantType 
+			SubClassOf: gufo:EndurantType, NonSortalType
+		Class: EndurantOrDatatype EquivalentTo:
+			gufo:EndurantType or rdfs:Datatype
+end
+
+
+pattern H1_Replacing 
+	[Class: EndurantType; 
+	 ? Class: NonSortalType; 
+	 ? ObjectProperty: relation; 
+	 ? Class: EndurantOrDatatype]
+    given Base =
+		RefinedRelation[EndurantType; relation; EndurantOrDatatype; NonSortalType]
+	then	
+		Class: NonSortalType SubClassOf: gufo:NonSortal
+		Class: EndurantType SubClassOf: gufo:EndurantType
+		Class: EndurantOrDatatype EquivalentTo:
+			gufo:EndurantType or rdfs:Datatype
+
+		Class: reifiedRelation SubClassOf: relation min 0 EndurantType
+end
