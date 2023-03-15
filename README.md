@@ -28,9 +28,9 @@ This repository contains full information about formalisation of rules for ODCMs
 The project contains Hets execution file. Since the current available version of Hets does not support GODPs, we provide a distribution that accepts the patterns. To run it, you need to install Hets according to the instructions in [Hets Website](http://hets.eu/), and then replace the executable with the file provided here. 
 
 Each folder contains the following information about the abstraction rule: 
-1. models of matching and replacing graphs (*.jpg);
+1. models of matching and replacing graphs (*.png);
 2. GODP in DOL based on gUFO (*.dol);
-3. example for pattern instantiation (*.dol, *.jpg).
+3. example for pattern instantiation (*.dol, *.png).
 
 ```txt
 /
