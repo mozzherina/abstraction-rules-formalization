@@ -27,6 +27,10 @@ This repository contains full information about formalisation of rules for ODCMs
 
 The project contains Hets execution file. Since the current available version of Hets does not support GODPs, we provide a distribution that accepts the patterns. To run it, you need to install Hets according to the instructions in [Hets Website](http://hets.eu/), and then replace the executable with the file provided here. 
 
+Please, be aware that the distributed file, unfortunately does not allow proper imports for url, so you need to explicitly specify define the ontology. The development team of Hets is currently working on this issue. 
+
+All rules can be found in `all_rules.pdf` file. 
+
 Each folder contains the following information about the abstraction rule: 
 1. models of matching and replacing graphs (*.png);
 2. GODP in DOL based on gUFO (*.dol);
@@ -35,6 +39,7 @@ Each folder contains the following information about the abstraction rule:
 ```txt
 /
 |   hets
+|   all_rules.pdf
 +---rule-1_folder/
 |   |   graph_matching.jpg
 |   |   graph_replacing.jpg
@@ -64,4 +69,4 @@ In case you would like to cite this work, you can refer to the original paper:
 
 
 ## Acknowledgements
-We would like to thank all developers of [Hets](http://hets.eu/), The heterogeneous tool set, for their incledible support during this project.
+We would like to thank all developers of [Hets](http://hets.eu/), The heterogeneous tool set, for their incredible support during this project.
