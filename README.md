@@ -27,7 +27,7 @@ This repository contains full information about formalisation of rules for ODCMs
 
 The project contains Hets execution file. Since the current available version of Hets does not support GODPs, we provide a distribution that accepts the patterns. To run it, you need to install Hets according to the instructions in [Hets Website](http://hets.eu/), and then replace the executable with the file provided here. 
 
-Please, be aware that the distributed file, unfortunately does not allow proper imports for url, so you need to explicitly specify define the ontology. The development team of Hets is currently working on this issue. 
+Please, be aware that the distributed file, unfortunately does not allow proper imports for url, so you need to explicitly specify define the ontology. The development team of Hets is currently working on this issue. Due to this issue and for the simplicity we also provide `gufo.dol` and `rdfs.dol` files.
 
 All rules can be found in `all_rules.pdf` file. 
 
@@ -40,6 +40,8 @@ Each folder contains the following information about the abstraction rule:
 /
 |   hets
 |   all_rules.pdf
+|   gufo.dol
+|   rdfs.dol
 +---rule-1_folder/
 |   |   graph_matching.jpg
 |   |   graph_replacing.jpg
