@@ -7,8 +7,9 @@
 
 logic OWL
 
-ontology GUFO = 
-	<https://purl.org/nemo/gufo#>
+
+ontology GUFO =
+	<http://purl.org/nemo/gufo>
 end
 
 ontology RDFS = 
@@ -20,48 +21,48 @@ ontology Base =
 end
 
 
-pattern RefinedRelation
-    [Class: D; ObjectProperty: f; Class: R; ? Class: Role] =
+pattern Reified_Relation_0D [
+	Class: D; ObjectProperty: f; Class: R; 
+	? ObjectProperty: role
+] =
 
-    ObjectProperty: f Domain: D Range: R
-    
-    Class: Role
-        SubClassOf: rolePerformedBy[D] max 1 D
-    
-    ObjectProperty: hasRole[Role] Range: Role
-    ObjectProperty: rolePerformedBy[D] InverseOf: hasRole[Role]
-    
+    ObjectProperty: f Domain: D Range: R 
+	ObjectProperty: f[role] 
+		SubPropertyOf: f
+
+	Class: D SubClassOf: f[role] min 0
 end
 
 
-pattern H1_Matching 
-	[Class: EndurantType; 
-	 Class: NonSortalType; 
-	 ? ObjectProperty: relation; 
-	 ? Class: EndurantOrDatatype]
-	given Base =
-		RefinedRelation[NonSortalType; relation; EndurantOrDatatype; ]
-	then 
-		Class: NonSortalType SubClassOf: gufo:NonSortal
-		Class: EndurantType 
-			SubClassOf: gufo:EndurantType, NonSortalType
-		Class: EndurantOrDatatype EquivalentTo:
-			gufo:EndurantType or rdfs:Datatype
+pattern NonSortal_Matching [
+	Class: Endurant; Class: NonSortalType; 
+	? ObjectProperty: relation; ? Class: EndurantOrDatatype
+] given Base =
+
+	Class: NonSortalType SubClassOf: gufo:NonSortal
+	Class: Endurant 
+		SubClassOf: gufo:EndurantType, NonSortalType
+	Class: EndurantOrDatatype 
+		SubClassOf: gufo:EndurantType or rdfs:Datatype
+
+	ObjectProperty: relation 
+		Domain: NonSortalType Range: EndurantOrDatatype 
 end
 
 
-pattern H1_Replacing 
-	[Class: EndurantType; 
-	 ? Class: NonSortalType; 
-	 ? ObjectProperty: relation; 
-	 ? Class: EndurantOrDatatype]
-    given Base =
-		RefinedRelation[EndurantType; relation; EndurantOrDatatype; NonSortalType]
-	then	
-		Class: NonSortalType SubClassOf: gufo:NonSortal
-		Class: EndurantType SubClassOf: gufo:EndurantType
-		Class: EndurantOrDatatype EquivalentTo:
-			gufo:EndurantType or rdfs:Datatype
+pattern NonSortal_Replacing [
+	Class: Endurant; 
+	? Class: NonSortalType; ? ObjectProperty: relation; 
+	? Class: EndurantOrDatatype
+] given Base =
 
-		Class: reifiedRelation SubClassOf: relation min 0 EndurantType
+	Reified_Relation_0D[
+		Endurant; relation; EndurantOrDatatype; 
+		NonSortalType
+	]
+then		
+	Class: Endurant SubClassOf: gufo:EndurantType
+	Class: EndurantOrDatatype 
+		SubClassOf: gufo:EndurantType or rdfs:Datatype
+
 end

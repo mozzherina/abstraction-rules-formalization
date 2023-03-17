@@ -1,0 +1,73 @@
+%prefix( 
+	: <http://example.com#>
+	gufo: <https://purl.org/nemo/gufo#>
+	rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+)%
+
+
+logic OWL
+
+
+ontology GUFO =
+	<http://purl.org/nemo/gufo>
+end
+
+ontology RDFS = 
+	<http://www.w3.org/2000/01/rdf-schema#>
+end
+
+ontology Base =
+  GUFO and RDFS
+end
+
+
+pattern Reified_Relation_0D [
+	Class: D; ObjectProperty: f; Class: R; 
+	? ObjectProperty: role
+] =
+
+    ObjectProperty: f Domain: D Range: R 
+	ObjectProperty: f[role] 
+		SubPropertyOf: f
+
+	Class: D SubClassOf: f[role] min 0
+end
+
+
+pattern Sortal_Matching [
+	Class: GeneralType; Class: SortalType; 
+	? ObjectProperty: relation; ? Class: AnotherType
+] given Base =
+
+    Class: GeneralType 
+		SubClassOf: gufo:EndurantType or 
+					gufo:Aspect or gufo:Event
+    Class: SortalType 
+		SubClassOf: gufo:Sortal, GeneralType
+    Class: AnotherType 
+		SubClassOf: gufo:EndurantType or gufo:Aspect or
+					gufo:Event or rdfs:Datatype
+					
+	ObjectProperty: relation 
+		Domain: SortalType Range: AnotherType 
+end
+
+
+pattern Sortal_Replacing [
+	Class: GeneralType; 
+	? Class: SortalType; ? ObjectProperty: relation; 
+	? Class: AnotherType
+] given Base =
+
+	Reified_Relation_0D[
+		GeneralType; relation; AnotherType; 
+		SortalType
+	]
+then		
+	Class: GeneralType 
+		SubClassOf: gufo:EndurantType or 
+					gufo:Aspect or gufo:Event
+	Class: AnotherType 
+		SubClassOf: gufo:EndurantType or gufo:Aspect or
+					gufo:Event or rdfs:Datatype
+end

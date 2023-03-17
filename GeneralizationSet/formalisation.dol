@@ -1,0 +1,49 @@
+%prefix( 
+	: <http://example.com#>
+	gufo: <https://purl.org/nemo/gufo#>
+	rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+)%
+
+
+logic OWL
+
+
+ontology GUFO =
+	<http://purl.org/nemo/gufo>
+end
+
+
+pattern GeneralizationSet_Matching [
+	Class: GeneralType; Class: SpecificType1; Class: SpecificType2
+] given GUFO =
+
+    Class: SortalOrEvent
+		SubClassOf: gufo:Sortal or gufo:Event
+	
+	Class: GeneralType SubClassOf: SortalOrEvent
+    Class: SpecificType1 
+		SubClassOf: GeneralType, SortalOrEvent
+    Class: SpecificType2 
+		SubClassOf: GeneralType, SortalOrEvent
+		DisjointWith: SpecificType1
+	
+	Class: GeneralType 
+		EquivalentTo: SpecificType1 and SpecificType2
+end
+
+
+pattern GeneralizationSet_Replacing [
+	Class: GeneralType; Class: SpecificType1; Class: SpecificType2
+] given GUFO =
+
+	Class: Collection  
+		EquivalentTo: SpecificType1 or SpecificType2
+		
+	Class: GeneralType
+		SubClassOf: gufo:Sortal or gufo:Event
+	
+	ObjectProperty: oneOf Domain: GeneralType Range: Collection 
+	
+	Class: Collection SubClassOf: oneOf max 1
+		
+end
