@@ -30,7 +30,7 @@ pattern Reified_Relation_0D [
 	ObjectProperty: f[role] 
 		SubPropertyOf: f
 
-	Class: D SubClassOf: f[role] min 0
+	Class: D SubClassOf: f min 0
 end
 
 
@@ -51,9 +51,8 @@ end
 
 
 pattern NonSortal_Replacing [
-	Class: Endurant; 
-	? Class: NonSortalType; ? ObjectProperty: relation; 
-	? Class: EndurantOrDatatype
+	Class: Endurant; Class: NonSortalType; 
+	? ObjectProperty: relation; ? Class: EndurantOrDatatype
 ] given Base =
 
 	Reified_Relation_0D[

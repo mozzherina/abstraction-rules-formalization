@@ -1,0 +1,106 @@
+%prefix( 
+	: <http://example.com#>
+	gufo: <https://purl.org/nemo/gufo#>
+	rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+)%
+
+
+logic OWL
+
+
+ontology GUFO =
+	<http://purl.org/nemo/gufo>
+end
+
+ontology RDFS = 
+	<http://www.w3.org/2000/01/rdf-schema#>
+end
+
+ontology Base =
+  GUFO and RDFS
+end
+
+
+pattern Reified_Relation_0D [
+	Class: D; ObjectProperty: f; Class: R; 
+	? ObjectProperty: role
+] =
+
+    ObjectProperty: f Domain: D Range: R 
+	ObjectProperty: f[role] 
+		SubPropertyOf: f
+
+	Class: D SubClassOf: f[role] min 0
+end
+
+
+pattern Aspect_Matching [
+	Class: AspectType; 
+	Class: EndurantType1; ObjectProperty: mediation1;
+	? Class: EndurantType2; ? ObjectProperty: mediation2;
+	? Class: EndurantOrDatatype; ? ObjectProperty: relation;
+	? Class: EventType; ? ObjectProperty: participation
+] given Base =
+	    
+    Class: AspectType
+		SubClassOf: gufo:Aspect
+    Class: EndurantType1 
+		SubClassOf: gufo:EndurantType    
+    
+    Class: EndurantType2 
+		SubClassOf: gufo:EndurantType
+		DisjointWith: EndurantType1    
+    Class: EndurantOrDatatype 
+		SubClassOf: gufo:EndurantType or rdfs:Datatype
+    Class: EventType 
+		SubClassOf: gufo:Event
+					
+	ObjectProperty: mediation1
+		SubClassOf: gufo:mediates
+		Domain: AspectType Range: EndurantType1
+	ObjectProperty: mediation2
+		SubClassOf: gufo:mediates
+		Domain: AspectType Range: EndurantType2
+
+	ObjectProperty: relation 
+		Domain: AspectType Range: EndurantOrDatatype
+	ObjectProperty: participation 
+		SubClassOf: gufo:participatedIn
+		Domain: AspectType Range: EventType 
+end
+
+
+pattern Aspect_Replacing [
+	Class: EndurantType1; ? Class: EndurantType2;
+	? Class: EndurantOrDatatype; ? ObjectProperty: relation;
+	? Class: EventType; ? ObjectProperty: participation
+] given Base =
+	Reified_Relation_0D [
+		EndurantType1; relation; EndurantOrDatatype;
+		EndurantType1
+	]
+then
+	Reified_Relation_0D [
+		EndurantType2; relation; EndurantOrDatatype;
+		EndurantType2
+	]
+then
+
+    Class: EndurantType1 
+		SubClassOf: gufo:EndurantType    
+    
+    Class: EndurantType2 
+		SubClassOf: gufo:EndurantType
+		DisjointWith: EndurantType1    
+    Class: EndurantOrDatatype 
+		SubClassOf: gufo:EndurantType or rdfs:Datatype
+    Class: EventType 
+		SubClassOf: gufo:Event
+					
+	ObjectProperty: participation1
+		SubClassOf: gufo:participatedIn
+		Domain: EndurantType1 Range: EventType 
+	ObjectProperty: participation2
+		SubClassOf: gufo:participatedIn
+		Domain: EndurantType2 Range: EventType 
+end

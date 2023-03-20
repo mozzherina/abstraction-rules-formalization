@@ -1,0 +1,95 @@
+%prefix( 
+	: <http://example.com#>
+	gufo: <https://purl.org/nemo/gufo#>
+	rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+)%
+
+
+logic OWL
+
+
+ontology GUFO =
+	<http://purl.org/nemo/gufo>
+end
+
+
+pattern Reified_Relation_1D_0R [
+	Class: D; ObjectProperty: f; Class: R
+] =
+
+    ObjectProperty: f Domain: D Range: R 
+
+	Class: D SubClassOf: f max 1
+	Class: R SubClassOf: f min 0
+end
+
+
+pattern ComponentOf_Matching [
+	Class: WholeObject; Class: PartObject; 
+	? ObjectProperty: relation; ? Class: AnotherType
+] given GUFO =
+
+    Class: GeneralType 
+		SubClassOf: gufo:EndurantType or 
+					gufo:Aspect or gufo:Event
+	
+	Class: WholeObject SubClassOf: gufo:EndurantType
+	Class: PartObject SubClassOf: gufo:EndurantType
+	ObjectProperty: componentOf
+		SubClassOf: gufo:isComponentOf
+		Domain: PartObject Range: WholeObject
+	
+	Class: AnotherType SubClassOf: GeneralType
+	ObjectProperty: relation 
+		SubClassOf: not gufo:wasTerminatedIn
+		Domain: PartObject Range: AnotherType
+end
+
+
+pattern ComponentOf_Replacing [
+	Class: WholeObject; Class: PartObject; 
+	? ObjectProperty: relation; ? Class: AnotherType
+] given GUFO =
+
+	Reified_Relation_1D_0R[
+		WholeObject; relation; AnotherType
+	]
+then		
+	Class: GeneralType 
+		SubClassOf: gufo:EndurantType or 
+					gufo:Aspect or gufo:Event
+	
+	Class: WholeObject SubClassOf: gufo:EndurantType
+	Class: PartObject SubClassOf: gufo:EndurantType
+	ObjectProperty: partOf
+		SubClassOf: gufo:isObjectProperPartOf
+		Domain: PartObject Range: WholeObject
+end
+
+
+ontology SurgeryOntology =
+	GUFO
+then 
+	Class: Person SubClassOf: gufo:Kind
+	Class: Heart SubClassOf: gufo:Kind
+	Class: SurgicalTeam SubClassOf: gufo:Collection
+	
+	ObjectProperty: componentOf 
+		SubClassOf: gufo:isComponentOf
+		Domain: Heart Range: Person
+		
+	ObjectProperty: operatedBy
+		SubClassOf: gufo:RelationshipType 
+		Domain: Heart Range: SurgicalTeam
+	
+then	
+	ComponentOf_Matching [
+		Person; Heart; 
+		operatedBy; SurgicalTeam
+	]	
+then %def	
+	ComponentOf_Replacing [
+		Person; Heart; 
+		operatedBy; SurgicalTeam
+	]
+end
