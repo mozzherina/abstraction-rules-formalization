@@ -2,6 +2,7 @@
 
 This repository contains full information about formalisation of rules for ODCMs' abstractions originally specified for OntoUML as GODPs.  
 
+Please, be aware, that this is the work in progress, we are trying to make the rules easier and more clear. 
 
 - [Terms and Abbreviations](#terms-and-abbreviations)
 - [Structure of the project](#structure-of-the-project)
