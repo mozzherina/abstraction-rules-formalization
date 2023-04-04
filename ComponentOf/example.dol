@@ -17,7 +17,7 @@ pattern Reified_Relation_1D_0R [
 	Class: D; ObjectProperty: f; Class: R
 ] =
 
-    ObjectProperty: f Domain: D Range: R 
+    	ObjectProperty: f Domain: D Range: R 
 
 	Class: D SubClassOf: f max 1
 	Class: R SubClassOf: f min 0
@@ -29,17 +29,16 @@ pattern ComponentOf_Matching [
 	? ObjectProperty: relation; ? Class: AnotherType
 ] given GUFO =
 
-    Class: GeneralType 
-		SubClassOf: gufo:EndurantType or 
-					gufo:Aspect or gufo:Event
+    	Class: GeneralType 
+		SubClassOf: gufo:EndurantType or gufo:Aspect or gufo:Event
 	
 	Class: WholeObject SubClassOf: gufo:EndurantType
 	Class: PartObject SubClassOf: gufo:EndurantType
+	Class: AnotherType SubClassOf: GeneralType
+	
 	ObjectProperty: componentOf
 		SubClassOf: gufo:isComponentOf
 		Domain: PartObject Range: WholeObject
-	
-	Class: AnotherType SubClassOf: GeneralType
 	ObjectProperty: relation 
 		SubClassOf: not gufo:wasTerminatedIn
 		Domain: PartObject Range: AnotherType
@@ -56,11 +55,12 @@ pattern ComponentOf_Replacing [
 	]
 then		
 	Class: GeneralType 
-		SubClassOf: gufo:EndurantType or 
-					gufo:Aspect or gufo:Event
+		SubClassOf: gufo:EndurantType or gufo:Aspect or gufo:Event
 	
 	Class: WholeObject SubClassOf: gufo:EndurantType
 	Class: PartObject SubClassOf: gufo:EndurantType
+	Class: AnotherType SubClassOf: GeneralType
+	
 	ObjectProperty: partOf
 		SubClassOf: gufo:isObjectProperPartOf
 		Domain: PartObject Range: WholeObject
@@ -84,12 +84,10 @@ then
 	
 then	
 	ComponentOf_Matching [
-		Person; Heart; 
-		operatedBy; SurgicalTeam
+		Person; Heart; operatedBy; SurgicalTeam
 	]	
 then %def	
 	ComponentOf_Replacing [
-		Person; Heart; 
-		operatedBy; SurgicalTeam
+		Person; Heart; operatedBy; SurgicalTeam
 	]
 end
