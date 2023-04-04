@@ -17,20 +17,19 @@ ontology RDFS =
 end
 
 ontology Base =
-  GUFO and RDFS
+  	GUFO and RDFS
 end
 
 
-pattern Reified_Relation_0D [
+pattern Reified_Relation_0R [
 	Class: D; ObjectProperty: f; Class: R; 
 	? ObjectProperty: role
 ] =
 
-    ObjectProperty: f Domain: D Range: R 
-	ObjectProperty: f[role] 
-		SubPropertyOf: f
+    	ObjectProperty: f Domain: D Range: R 
+	ObjectProperty: f[role] SubPropertyOf: f
 
-	Class: D SubClassOf: f[role] min 0
+	Class: R SubClassOf: f min 0
 end
 
 
@@ -39,17 +38,15 @@ pattern Sortal_Matching [
 	? ObjectProperty: relation; ? Class: AnotherType
 ] given Base =
 
-    Class: GeneralType 
-		SubClassOf: gufo:EndurantType or 
-					gufo:Aspect or gufo:Event
-    Class: SortalType 
+    	Class: GeneralType 
+		SubClassOf: gufo:EndurantType or gufo:Aspect or gufo:Event
+    	Class: SortalType 
 		SubClassOf: gufo:Sortal, GeneralType
-    Class: AnotherType 
+    	Class: AnotherType 
 		SubClassOf: gufo:EndurantType or gufo:Aspect or
-					gufo:Event or rdfs:Datatype
+			    gufo:Event or rdfs:Datatype
 					
-	ObjectProperty: relation 
-		Domain: SortalType Range: AnotherType 
+	ObjectProperty: relation Domain: SortalType Range: AnotherType 
 end
 
 
@@ -59,15 +56,13 @@ pattern Sortal_Replacing [
 	? Class: AnotherType
 ] given Base =
 
-	Reified_Relation_0D[
-		GeneralType; relation; AnotherType; 
-		SortalType
+	Reified_Relation_0R[
+		GeneralType; relation; AnotherType; SortalType
 	]
 then		
 	Class: GeneralType 
-		SubClassOf: gufo:EndurantType or 
-					gufo:Aspect or gufo:Event
+		SubClassOf: gufo:EndurantType or gufo:Aspect or gufo:Event
 	Class: AnotherType 
 		SubClassOf: gufo:EndurantType or gufo:Aspect or
-					gufo:Event or rdfs:Datatype
+			    gufo:Event or rdfs:Datatype
 end
