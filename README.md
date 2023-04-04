@@ -38,7 +38,7 @@ Each folder contains the following information about the abstraction rule:
 3. example for pattern instantiation (*.dol, *.png).
 
 ```txt
-/
+root/
 |   hets
 |   all_rules.pdf
 |   gufo.dol
