@@ -17,7 +17,7 @@ ontology RDFS =
 end
 
 ontology Base =
-  GUFO and RDFS
+  	GUFO and RDFS
 end
 
 
@@ -26,9 +26,8 @@ pattern Reified_Relation_0D [
 	? ObjectProperty: role
 ] =
 
-    ObjectProperty: f Domain: D Range: R 
-	ObjectProperty: f[role] 
-		SubPropertyOf: f
+    	ObjectProperty: f Domain: D Range: R 
+	ObjectProperty: f[role] SubPropertyOf: f
 
 	Class: D SubClassOf: f min 0
 end
@@ -72,7 +71,7 @@ ontology CarOntology =
 then 
 	Class: Car SubClassOf: gufo:Kind
 	Class: PhysicalObject SubClassOf: gufo:Mixin
-	Class: Weight SubClassOf: gufo:EndurantType
+	Class: Weight SubClassOf: rdfs:Datatype
 
 	ObjectProperty: hasProperty 
 		Domain: PhysicalObject Range: Weight
@@ -83,7 +82,7 @@ then
 	]	
 then %def	
 	NonSortal_Replacing [
-		Car; 
-		PhysicalObject; hasProperty; Weight
+		Car; PhysicalObject; 
+		hasProperty; Weight
 	]
 end
