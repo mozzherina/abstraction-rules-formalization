@@ -12,15 +12,22 @@ ontology GUFO =
 	<http://purl.org/nemo/gufo>
 end
 
+ontology RDFS = 
+	<http://www.w3.org/2000/01/rdf-schema#>
+end
+
+ontology Base =
+  	GUFO and RDFS
+end
+
 
 pattern Reified_Relation_1D_0R [
 	Class: D; ObjectProperty: f; Class: R; 
 	ObjectProperty: role
 ] =
 
-    ObjectProperty: f Domain: D Range: R 
-	ObjectProperty: f[role] 
-		SubPropertyOf: f
+    	ObjectProperty: f Domain: D Range: R 
+	ObjectProperty: f[role] SubPropertyOf: f
 
 	Class: D SubClassOf: f[role] max 1
 	Class: R SubClassOf: f[role] min 0
@@ -31,28 +38,28 @@ pattern TransitivePartOf_Matching [
 	Class: WholeType; Class: PartType; 
 	? ObjectProperty: relation; ? Class: AnotherType;
 	? ObjectProperty: memberOf; ? Class: MemberType
-] given GUFO =
+] given Base =
 
-    Class: GeneralType 
-		SubClassOf: gufo:EndurantType or 
-					gufo:Aspect or gufo:Event
+    	Class: GeneralType 
+		SubClassOf: gufo:EndurantType or gufo:Aspect or gufo:Event
+
 	ObjectProperty: transitivePartOf
 		SubClassOf: gufo:isSubCollectionOf
-			or gufo:isSubQuantityOf
-			or gufo:isAspectProperPartOf
-			or gufo:isEventProperPartOf
+			 or gufo:isSubQuantityOf
+			 or gufo:isAspectProperPartOf
+			 or gufo:isEventProperPartOf
 
 	Class: WholeType SubClassOf: GeneralType
 	Class: PartType SubClassOf: GeneralType
 	ObjectProperty: transitivePartOf
 		Domain: PartType Range: WholeType
 	
-	Class: AnotherType SubClassOf: GeneralType
+	Class: AnotherType SubClassOf: GeneralType or rdfs:Datatype
 	ObjectProperty: relation 
 		SubClassOf: not gufo:wasTerminatedIn
 		Domain: PartType Range: AnotherType
 	
-	Class: MemberType SubClassOf: GeneralType
+	Class: MemberType SubClassOf: gufo:Object
 	ObjectProperty: memberOf
 		SubClassOf: gufo:isCollectionMemberOf
 		Domain: MemberType Range: PartType
@@ -63,28 +70,19 @@ pattern TransitivePartOf_Replacing [
 	Class: WholeType; Class: PartType; 
 	? ObjectProperty: relation; ? Class: AnotherType;
 	? ObjectProperty: memberOf; ? Class: MemberType
-] given GUFO =
+] given Base =
 
 	Reified_Relation_1D_0R[
 		WholeType; relation; AnotherType; PartType
 	]
 then		
 	Class: GeneralType 
-		SubClassOf: gufo:EndurantType or 
-					gufo:Aspect or gufo:Event
-	
-	Class: AnotherType 
-		SubClassOf: gufo:EndurantType or gufo:Aspect or
-					gufo:Event or rdfs:Datatype
-
-    Class: GeneralType 
-		SubClassOf: gufo:EndurantType or 
-					gufo:Aspect or gufo:Event
+		SubClassOf: gufo:EndurantType or gufo:Aspect or gufo:Event
 
 	Class: WholeType SubClassOf: GeneralType
-	Class: AnotherType SubClassOf: GeneralType
+	Class: AnotherType SubClassOf: GeneralType or rdfs:Datatype
 
-	Class: MemberType SubClassOf: GeneralType
+	Class: MemberType SubClassOf: gufo:Object
 	ObjectProperty: memberOf
 		SubClassOf: gufo:isCollectionMemberOf
 		Domain: MemberType Range: WholeType

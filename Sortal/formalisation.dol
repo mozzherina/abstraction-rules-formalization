@@ -23,13 +23,13 @@ end
 
 pattern Reified_Relation_0R [
 	Class: D; ObjectProperty: f; Class: R; 
-	? ObjectProperty: role
+	ObjectProperty: role
 ] =
 
     	ObjectProperty: f Domain: D Range: R 
 	ObjectProperty: f[role] SubPropertyOf: f
 
-	Class: R SubClassOf: f min 0
+	Class: R SubClassOf: f[role] min 0
 end
 
 
