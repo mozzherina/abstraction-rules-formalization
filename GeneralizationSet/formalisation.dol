@@ -17,13 +17,12 @@ pattern GeneralizationSet_Matching [
 	Class: GeneralType; Class: SpecificType1; Class: SpecificType2
 ] given GUFO =
 
-    Class: SortalOrEvent
-		SubClassOf: gufo:Sortal or gufo:Event
+    	Class: SortalOrEvent SubClassOf: gufo:Sortal or gufo:Event
 	
 	Class: GeneralType SubClassOf: SortalOrEvent
-    Class: SpecificType1 
-		SubClassOf: GeneralType, SortalOrEvent
-    Class: SpecificType2 
+    	
+	Class: SpecificType1 SubClassOf: GeneralType, SortalOrEvent
+    	Class: SpecificType2 
 		SubClassOf: GeneralType, SortalOrEvent
 		DisjointWith: SpecificType1
 	
@@ -37,8 +36,7 @@ pattern GeneralizationSet_Replacing [
 ] given GUFO =
 
 	Class: Collection  
-		EquivalentTo: SpecificType1 or SpecificType2
-		
+		EquivalentTo: SpecificType1 or SpecificType2	
 	Class: GeneralType
 		SubClassOf: gufo:Sortal or gufo:Event
 	
