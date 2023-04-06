@@ -17,20 +17,18 @@ ontology RDFS =
 end
 
 ontology Base =
-  GUFO and RDFS
+  	GUFO and RDFS
 end
 
 
-pattern Reified_Relation_0D [
-	Class: D; ObjectProperty: f; Class: R; 
-	? ObjectProperty: role
+pattern Reified_Relation_0R [
+	Class: D; ObjectProperty: f; Class: R; ObjectProperty: role
 ] =
 
-    ObjectProperty: f Domain: D Range: R 
-	ObjectProperty: f[role] 
-		SubPropertyOf: f
+    	ObjectProperty: f Domain: D Range: R 
+	ObjectProperty: f[role] SubPropertyOf: f
 
-	Class: D SubClassOf: f[role] min 0
+	Class: R SubClassOf: f[role] min 0
 end
 
 
@@ -42,18 +40,15 @@ pattern Aspect_Matching [
 	? Class: EventType; ? ObjectProperty: participation
 ] given Base =
 	    
-    Class: AspectType
-		SubClassOf: gufo:Aspect
-    Class: EndurantType1 
-		SubClassOf: gufo:EndurantType    
-    
-    Class: EndurantType2 
+    	Class: AspectType SubClassOf: gufo:Aspect
+    	Class: EndurantType1 SubClassOf: gufo:EndurantType    
+    	Class: EndurantType2 
 		SubClassOf: gufo:EndurantType
 		DisjointWith: EndurantType1    
-    Class: EndurantOrDatatype 
+    	
+	Class: EndurantOrDatatype 
 		SubClassOf: gufo:EndurantType or rdfs:Datatype
-    Class: EventType 
-		SubClassOf: gufo:Event
+    	Class: EventType SubClassOf: gufo:Event
 					
 	ObjectProperty: mediation1
 		SubClassOf: gufo:mediates
@@ -75,27 +70,23 @@ pattern Aspect_Replacing [
 	? Class: EndurantOrDatatype; ? ObjectProperty: relation;
 	? Class: EventType; ? ObjectProperty: participation
 ] given Base =
-	Reified_Relation_0D [
-		EndurantType1; relation; EndurantOrDatatype;
-		EndurantType1
+	Reified_Relation_0R [
+		EndurantType1; relation; EndurantOrDatatype; EndurantType1
 	]
 then
-	Reified_Relation_0D [
-		EndurantType2; relation; EndurantOrDatatype;
-		EndurantType2
+	Reified_Relation_0R [
+		EndurantType2; relation; EndurantOrDatatype; EndurantType2
 	]
 then
 
-    Class: EndurantType1 
-		SubClassOf: gufo:EndurantType    
+    	Class: EndurantType1 SubClassOf: gufo:EndurantType    
     
-    Class: EndurantType2 
+    	Class: EndurantType2 
 		SubClassOf: gufo:EndurantType
 		DisjointWith: EndurantType1    
-    Class: EndurantOrDatatype 
+    	Class: EndurantOrDatatype 
 		SubClassOf: gufo:EndurantType or rdfs:Datatype
-    Class: EventType 
-		SubClassOf: gufo:Event
+    	Class: EventType SubClassOf: gufo:Event
 					
 	ObjectProperty: participation1
 		SubClassOf: gufo:participatedIn
@@ -106,47 +97,35 @@ then
 end
 
 
-ontology CarAgency =
-	Base
-then 
-	Class: Car SubClassOf: gufo:Kind
-	Class: Organization SubClassOf: gufo:Kind
-	Class: CarAgency 
-		SubClassOf: gufo:SubKind, Organization
-		
-	ObjectProperty: owns Domain: CarAgency Range: Car
-	
-then	
-	Sortal_Matching [
-		Organization; CarAgency; 
-		owns; Car
-	]	
-then %def	
-	Sortal_Replacing [
-		Organization; 
-		CarAgency; owns; Car
-	]
-end
-
-
 ontology MarriageRelator =
 	Base
 then 
+	Class: Person SubClassOf: gufo:Kind
+	Class: Wife SubClassOf: gufo:SubKind, Person
+	Class: Husband SubClassOf: gufo:SubKind, Person
 	Class: Marriage SubClassOf: gufo:Relator
-	Class: CivilMarriage SubClassOf: gufo:SubKind, Marriage
 	Class: Visa SubClassOf: gufo:Kind
+
+	ObjectProperty: mediation1
+		SubClassOf: gufo:mediates
+		Domain: Marriage Range: Wife
+
+	ObjectProperty: mediation2
+		SubClassOf: gufo:mediates
+		Domain: Marriage Range: Husband
 	
 	ObjectProperty: isReasonFor 
-		Domain: CivilMarriage Range: Visa
+		Domain: Marriage Range: Visa
 	
 then	
-	Sortal_Matching [
-		Marriage; CivilMarriage; 
-		isReasonFor; Visa
-	]	
-then %def	
-	Sortal_Replacing [
+	Aspect_Matching [
 		Marriage; 
-		CivilMarriage; isReasonFor; Visa
+		Wife; mediation1; Husband; mediation2;
+		Visa; isReasonFor; ;
+	]
+		
+then %def	
+	Aspect_Replacing [
+		Wife; Husband; Visa; isReasonFor; ;
 	]
 end	
